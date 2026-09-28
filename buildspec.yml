@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "CodeBuild started"
+      - echo "Logging in to Docker Hub"
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+  build:
+    commands:
+      - echo "Building Docker image"
+      - docker build -t $DOCKER_USERNAME/website-app:latest .
+
+  post_build:
+    commands:
+      - echo "Pushing Docker image to Docker Hub"
+      - docker push $DOCKER_USERNAME/website-app:latest
+      - echo "Build and push completed successfully"
